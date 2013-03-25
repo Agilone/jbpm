@@ -6,7 +6,7 @@
 
   <property name="jboss.server.conf.dir" value="${jboss.home}/server/${jboss.server.configuration}/conf" />
   <property name="jboss.server.lib.dir" value="${jboss.home}/server/${jboss.server.configuration}/lib" />
-  <property name="jboss.bind.address" value="localhost" />
+  <property name="jboss.bind.address" value="0.0.0.0" />
 
   <property name="eclipse.workspace.dir" value="${install.home}/workspace"/>
 
@@ -457,8 +457,7 @@
       <fileset dir="${install.home}/conf"/>
     </copy>
   	<!-- copy user defined persistence configuration if exists -->
-  	<copy tofile="${install.home}/target/jbpm-gwt-console-server-war/WEB-INF/classes/META-INF/persistence.xml" overwrite="true" 
-  		file="${install.home}/db/jbpm-persistence.xml" failonerror="false"/>
+	<copy tofile="${install.home}/target/jbpm-gwt-console-server-war/WEB-INF/classes/META-INF/persistence.xml" overwrite="true" file="${install.home}/db/jbpm-persistence-${jpa.version}.xml" failonerror="false"/>
   	<copy tofile="${install.home}/target/jbpm-gwt-console-server-war/WEB-INF/classes/META-INF/ProcessInstanceInfoMapping.xml" overwrite="true" 
   		file="${install.home}/db/ProcessInstanceInfoMapping.xml" failonerror="false"/>
 
@@ -568,8 +567,7 @@
   	          tofile="${install.home}/target/jbpm-human-task-war/WEB-INF/web.xml" 
   	          overwrite="true" />
     <!-- copy user defined persistence configuration if exists -->
-    <copy tofile="${install.home}/target/jbpm-human-task-war/WEB-INF/classes/META-INF/persistence.xml" overwrite="true" 
-    	file="${install.home}/db/task-persistence.xml" failonerror="false"/>
+	<copy tofile="${install.home}/target/jbpm-human-task-war/WEB-INF/classes/META-INF/persistence.xml" overwrite="true" file="${install.home}/db/task-persistence-${jpa.version}.xml" failonerror="false"/>
     <copy tofile="${install.home}/target/jbpm-human-task-war/WEB-INF/classes/META-INF/ProcessInstanceInfoMapping.xml" overwrite="true"
     	file="${install.home}/db/Taskorm.xml" failonerror="false"/>
     <zip basedir="${install.home}/target/jbpm-human-task-war"
@@ -875,17 +873,26 @@
     </java>
   </target>
 
-  <!-- Start Demo -->
-  <target name="start.demo" depends="start.h2,start.jboss,start.eclipse" />
-  
-  <!-- Start Demo (Eclipse) -->
-  <target name="start.demo.eclipse" depends="start.h2,start.eclipse" />
-
-  <!-- Start Demo (No Eclipse)--> 
-  <target name="start.demo.noeclipse" depends="start.h2,start.jboss" />	
-  
-  <!-- Stop Demo -->
-  <target name="stop.demo" depends="stop.h2,stop.jboss" />
+<!-- Start Demo -->
+<target name="start.demo" depends="start.h2,start.jboss,start.eclipse" />
+ 
+<!-- Start Demo (DB) -->
+<target name="start.demo.db" depends="start.jboss, start.eclipse" />
+ 
+<!-- Start Demo (DB, No Eclipse) -->
+<target name="start.demo.db.noeclipse" depends="start.jboss" />
+ 
+<!-- Start Demo (Eclipse) -->
+<target name="start.demo.eclipse" depends="start.h2,start.eclipse" />
+ 
+<!-- Start Demo (No Eclipse)-->
+<target name="start.demo.noeclipse" depends="start.h2,start.jboss" />
+ 
+<!-- Stop Demo -->
+<target name="stop.demo" depends="stop.h2,stop.jboss" />
+ 
+<!-- Stop Demo (DB)-->
+<target name="stop.demo.db" depends="stop.jboss" />
 
 
   <!-- ############ CLEAN ############ -->

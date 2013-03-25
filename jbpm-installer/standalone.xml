@@ -99,39 +99,51 @@
         <subsystem xmlns="urn:jboss:domain:configadmin:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:1.0">
             <datasources>
-                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                <datasource jta="true" jndi-name="java:jboss/datasources/jbpmDS" pool-name="H2DS" enabled="true" use-java-context="true" use-ccm="true">
-                    <connection-url>jdbc:h2:~/jbpm</connection-url>
-                    <driver>h2</driver>
-                    <pool>
-                        <min-pool-size>1</min-pool-size>
-                        <max-pool-size>4</max-pool-size>
-                        <prefill>false</prefill>
-                        <use-strict-min>false</use-strict-min>
-                        <flush-strategy>FailingConnectionOnly</flush-strategy>
-                    </pool>
-                    <security>
-                        <user-name>sa</user-name>
-                    </security>
-                    <validation>
-                        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
-                        <validate-on-match>false</validate-on-match>
-                        <background-validation>false</background-validation>
-                    </validation>
-                </datasource>
-                <drivers>
-                    <driver name="h2" module="com.h2database.h2">
-                        <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
-                    </driver>
-                </drivers>
-            </datasources>
+                <datasource jta="true" jndi-name="java:jboss/datasources/jbpmDS" pool-name="jbpmDS" enabled="true" use-java-context="true" use-ccm="true">
+  <connection-url>jdbc:mysql://localhost:3306/njbpm</connection-url>
+  <driver>mysql</driver>
+  <pool>
+    <min-pool-size>1</min-pool-size>
+    <max-pool-size>40</max-pool-size>
+    <prefill>false</prefill>
+    <use-strict-min>false</use-strict-min>
+    <flush-strategy>FailingConnectionOnly</flush-strategy>
+  </pool>
+  <security>
+    <user-name>njbpm</user-name>
+    <password>njbpm</password>
+  </security>
+  <validation>
+    <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+    <validate-on-match>false</validate-on-match>
+    <background-validation>false</background-validation>
+  </validation>
+</datasource>
+<datasource jta="true" jndi-name="java:jboss/datasources/taskDS" pool-name="taskDS" enabled="true" use-java-context="true" use-ccm="true">
+  <connection-url>jdbc:mysql://localhost:3306/ntask</connection-url>
+  <driver>mysql</driver>
+  <pool>
+    <min-pool-size>1</min-pool-size>
+    <max-pool-size>40</max-pool-size>
+    <prefill>false</prefill>
+    <use-strict-min>false</use-strict-min>
+    <flush-strategy>FailingConnectionOnly</flush-strategy>
+  </pool>
+  <security>
+    <user-name>njbpm</user-name>
+    <password>njbpm</password>
+  </security>
+  <validation>
+    <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+    <validate-on-match>false</validate-on-match>
+    <background-validation>false</background-validation>
+  </validation>
+</datasource>
+<drivers>
+  <driver name="mysql" module="com.mysql">
+    <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+  </driver>
+</drivers>            </datasources>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="300"/>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <definitions id="Definition"
              typeLanguage="http://www.java.com/javaTypes"
+             targetNamespace="http://www.omg.org/spec/BPMN/20100524/MODEL"
              expressionLanguage="http://www.mvel.org/2.0"
              xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

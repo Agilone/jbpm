@@ -1,0 +1,84 @@
+{ 
+    "Configuration": [
+        {
+            "hdfsout.eventszip": [
+                "/user/ubuntu/rawfs/tabl498660ea1aa946dcbb118dff6bcad058/"
+            ],
+            "mailing.hdfsdir": [
+                "/user/ubuntu/rawfs/table1d243f9fb644a3dbbd9cfdbe0201aea/,/user/ubuntu/rawfs/tabl9cead7ae04874b409bc26cb0acc39fc8/,/user/ubuntu/rawfs/tablf078fab3fe3c46a0b780533c55eea5cf/,/user/ubuntu/rawfs/tabl2ebc957276dd4bff9d5cf6b88029658b/,/user/ubuntu/rawfs/tabl57a17778ad454639a6da2e4e8afe1862/,/user/ubuntu/rawfs/tabl3dd306bf9dc64cdbbd4dee43c6bb6f0f/,/user/ubuntu/rawfs/tablc207bde851f043c5b3501aa2f305cb16/,/user/ubuntu/rawfs/tabld99b7a8cfdab4438937d503f4335f907/,/user/ubuntu/rawfs/tablb11bab355a47403fa8bebec6fb445616/,/user/ubuntu/rawfs/tablcce07e4e61384e45b494ab7fb86fad83/"
+            ],
+            "out.agilm.message": [
+                "/user/ubuntu/bf44b30a-58ee-47b0-8a32-cf3ced9f50a3/"
+            ],
+            "hdfsout.contactlist": [
+                "/user/ubuntu/rawfs/tablef6cf7b81ff044c9ba31c14233f8dad6/#9935802,/user/ubuntu/rawfs/tabl04722b0b250045ecb733859547500323/#9935787,/user/ubuntu/rawfs/table20798cd773644cb81c3770ee7622546/#9638108,/user/ubuntu/rawfs/tablcf3caf9fb98f4dc48ddba8980eccc555/#9935801"
+            ],
+            "workitem.starttime": [
+                "1360629697274"
+            ],
+            "end.date": [
+                "12/31/2012 00:00:00 AM"
+            ],
+            "workitem.status": [
+                "FAILED"
+            ],
+            "workitem.job": [
+                "5a6625a1-70da-4846-aa9a-342f28b177b3"
+            ],
+            "out.aglm.events": [
+                "varaglmevents"
+            ],
+            "out.aglm.contact": [
+                "varalmcontact"
+            ],
+            "score.engage.betas": [
+                "data/nx.Engage.glm.pmml.xml"
+            ],
+            "score.unsub.betas": [
+                "data/nx.Unsubscribe.glm.pmml.xml"
+            ],
+            "tenant.id": [
+                "vartenantid"
+            ],
+            "output.feature.path.esp" : [
+                "varoutputfeataure"
+            ],
+            "output.feature.path.a1" : [
+                "varoutputa1"
+            ],
+            "start.date": [
+                "12/30/2012 00:00:00 AM"
+            ],
+            
+                        "startDateDV": ["now-30"],
+            "endDateDV": ["now"],
+
+
+            "startDateIV": ["now-395"],
+            
+            "endDateIV": ["now-31"],
+
+            "startDate": ["now-365"],
+            
+            "endDate": ["now"],
+            
+            "startDateIVNumOfDays": ["now-61"] ,
+            "startDateIVNumOfDaysShort": ["now-41"] ,
+            "startDateNumOfDays": ["now-30"] ,
+            "startDateNumOfDaysShort": ["now-10"] ,
+            "NumOfDays": ["30"] ,
+            "NumOfDaysShort": ["10"] ,
+            
+            "CurrentDate": ["now"],
+            "activationPeriod": ["365"],
+            "EntityLevel": ["Contact"],
+            "FeatureList":["All","Test"],
+            "engage.coefficents" : [
+                "{\"fields\":[{\"name\":\"(Number of Emails Sent) * (Log(Number of Emails Sent))\",\"value\":-0.00270684777672053},{\"name\":\"(Number of Emails Sent) * (Log(Days Since First Email Sent))\",\"value\":0.00779571992569957},{\"name\":\"(Number of Emails Sent) * (Log(Number of clicked links))\",\"value\":-0.0049252728508044},{\"name\":\"(Number of Emails Sent Last X Days) * (Log(Number of Emails Sent Last X Days))\",\"value\":-0.00916853195744082},{\"name\":\"(Number of Emails Sent Last X Days) * (Log(Number of Opened Emails))\",\"value\":0.00582859491881598},{\"name\":\"(Days Since First Email Sent) * (Log(Number of Emails Sent Last X Days))\",\"value\":-0.00162229940378747},{\"name\":\"(Number of Opened Emails) * (Number of clicked links Last X Days)\",\"value\":0.000552379750446634},{\"name\":\"(Number of Opened Email Last X Days) * (Number of Opened Email Last X Days)\",\"value\":-0.000140026138440816},{\"name\":\"(Number of Opened Email Last X Days) * (Log(Number of Opened Emails))\",\"value\":0.00773181264156077},{\"name\":\"(Number of clicked links) * (Log(Number of Emails Sent Last X Days))\",\"value\":0.0165102169694058},{\"name\":\"(Number of clicked links) * (Log(Number of Opened Email Last X Days))\",\"value\":-0.0191977219503398},{\"name\":\"(Log(Number of Emails Sent)) * (Log(Days Since First Email Sent))\",\"value\":-0.17171182046009},{\"name\":\"(Log(Number of Emails Sent)) * (Log(Number of clicked links))\",\"value\":0.100969732123437},{\"name\":\"(Log(Number of Emails Sent Last X Days)) * (Log(Number of Opened Email Last X Days))\",\"value\":0.187417810328864},{\"name\":\"(Log(Number of Opened Email Last X Days)) * (Log(Number of Opened Email Last X Days))\",\"value\":0.0915678981129265},{\"name\":\"(Log(Number of Opened Email Last X Days)) * (Log(Number of clicked links Last X Days))\",\"value\":-0.0920420492653888}]}"
+            ],
+            "unsubscribe.coefficents" : [
+                "{\"fields\":[{\"name\":\"(Number of Emails Sent) * (Log(Number of Emails Sent))\",\"value\":-0.00270684777672053},{\"name\":\"(Number of Emails Sent) * (Log(Days Since First Email Sent))\",\"value\":0.00779571992569957},{\"name\":\"(Number of Emails Sent) * (Log(Number of clicked links))\",\"value\":-0.0049252728508044},{\"name\":\"(Number of Emails Sent Last X Days) * (Log(Number of Emails Sent Last X Days))\",\"value\":-0.00916853195744082},{\"name\":\"(Number of Emails Sent Last X Days) * (Log(Number of Opened Emails))\",\"value\":0.00582859491881598},{\"name\":\"(Days Since First Email Sent) * (Log(Number of Emails Sent Last X Days))\",\"value\":-0.00162229940378747},{\"name\":\"(Number of Opened Emails) * (Number of clicked links Last X Days)\",\"value\":0.000552379750446634},{\"name\":\"(Number of Opened Email Last X Days) * (Number of Opened Email Last X Days)\",\"value\":-0.000140026138440816},{\"name\":\"(Number of Opened Email Last X Days) * (Log(Number of Opened Emails))\",\"value\":0.00773181264156077},{\"name\":\"(Number of clicked links) * (Log(Number of Emails Sent Last X Days))\",\"value\":0.0165102169694058},{\"name\":\"(Number of clicked links) * (Log(Number of Opened Email Last X Days))\",\"value\":-0.0191977219503398},{\"name\":\"(Log(Number of Emails Sent)) * (Log(Days Since First Email Sent))\",\"value\":-0.17171182046009},{\"name\":\"(Log(Number of Emails Sent)) * (Log(Number of clicked links))\",\"value\":0.100969732123437},{\"name\":\"(Log(Number of Emails Sent Last X Days)) * (Log(Number of Opened Email Last X Days))\",\"value\":0.187417810328864},{\"name\":\"(Log(Number of Opened Email Last X Days)) * (Log(Number of Opened Email Last X Days))\",\"value\":0.0915678981129265},{\"name\":\"(Log(Number of Opened Email Last X Days)) * (Log(Number of clicked links Last X Days))\",\"value\":-0.0920420492653888}]}"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,818 @@
+register /usr/lib/hadoop/lib/a1schema_2.9.1-1.1307-SNAPSHOT.jar;
+register /home/ubuntu/ecoadapters-0.5.0-SNAPSHOT.jar;
+register /usr/lib/hadoop/lib/protobuf-java-2.4.0a.jar;
+register /home/ubuntu/sridhar/Elastic-Data-Grid_old/cube-builder.jar;
+register /home/ubuntu/sridhar/Elastic-Data-Grid_old/hbl-0.2.11-SNAPSHOT.jar;    
+
+-- register /usr/lib/pig/lib/a1schema_2.9.1-1.1307-SNAPSHOT.jar;
+-- register /usr/lib/pig/lib/ecoadapters-0.5.0-SNAPSHOT.jar;
+-- register /usr/lib/pig/lib/protobuf-java-2.4.0a.jar;
+-- register /usr/lib/pig/lib/cube-builder.jar;
+-- register /usr/lib/pig/lib/hbl-0.2.11-SNAPSHOT.jar;    
+-- register /usr/lib/pig/lib/jruby-complete-1.6.5.jar;
+-- register /usr/lib/pig/lib/hbase-0.94.2-cdh4.2.0-security.jar;
+
+-- set hbase.zookeeper.quorum 'CASCHDP9.agilone.com,CASCHDP8.agilone.com,CASCHDP7.agilone.com';
+
+set pig.noSplitCombination true; -- don't combine small files in one split  
+
+-- DEFINE hbl_m2d com.inadco.hbl.piggybank.Measure2Double('eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_d2k com.inadco.hbl.piggybank.Dimensions2CuboidKey('eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+
+DEFINE store_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdth_94A60662DFC27301144FEA5B0317D43F', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE store_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 com.inadco.ecoadapters.pig.HBaseProtobufStorage ('hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+DEFINE get_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 com.inadco.ecoadapters.pig.HBaseGet('AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80', 'hbl:icounter hbl:isubscribe hbl:iopen hbl:ibounce hbl:iclick hbl:iunsubscribe hbl:isend ');
+
+
+DEFINE hbl_aggr_icounter com.inadco.hbl.piggybank.AggregationFromMeasureBag('icounter','n','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_comb_icounter com.inadco.hbl.piggybank.AggregationFromMeasureBag('icounter','y','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_aggr_isubscribe com.inadco.hbl.piggybank.AggregationFromMeasureBag('isubscribe','n','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_comb_isubscribe com.inadco.hbl.piggybank.AggregationFromMeasureBag('isubscribe','y','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_aggr_iopen com.inadco.hbl.piggybank.AggregationFromMeasureBag('iopen','n','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_comb_iopen com.inadco.hbl.piggybank.AggregationFromMeasureBag('iopen','y','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_aggr_ibounce com.inadco.hbl.piggybank.AggregationFromMeasureBag('ibounce','n','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_comb_ibounce com.inadco.hbl.piggybank.AggregationFromMeasureBag('ibounce','y','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_aggr_iclick com.inadco.hbl.piggybank.AggregationFromMeasureBag('iclick','n','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_comb_iclick com.inadco.hbl.piggybank.AggregationFromMeasureBag('iclick','y','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_aggr_iunsubscribe com.inadco.hbl.piggybank.AggregationFromMeasureBag('iunsubscribe','n','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_comb_iunsubscribe com.inadco.hbl.piggybank.AggregationFromMeasureBag('iunsubscribe','y','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_aggr_isend com.inadco.hbl.piggybank.AggregationFromMeasureBag('isend','n','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+DEFINE hbl_comb_isend com.inadco.hbl.piggybank.AggregationFromMeasureBag('isend','y','eNqdVE2P2jAQvfMrZoVU2iqgAguqelttP1Sp7B6WHirEwXGGZNTEph57Kf++4xAEVSFq9mQYv/fmzXgmfSjQaATyoJUZeEgRslBtMYNU6Z+Av5X25R4Ugy+IR9DrDYfDHsAQ7r58W0AfdBCKURVGDGX1VR8yqtAwWcMSiKFXWkJjuPm+/Pz+vlDu4xEAK/BolPFfswRmCXgXMIHBANbnzMllJj6j8cv9VhiTd9e40ytZ5feTV9X2Byq3sMYXCYwn10RuL4tktlJk2rLPLhO1JFaUm1j1+Cp5fqVsSVomMP2X17RfHsVSduh9Hx4el58+AFN86B35AirLHgKjuGBk+BXQ7cnkYJ/R1X05vR80GvJGGXgb56OgvJCRMNYMg6GNdVUS54cYOOQ5sscaGfX/1uKjmEyKglKJCfJYARnIcEMmWmicj+COobQSEGyhuJDREpITyQKPMhtyInGyKjoHOniVlshJXRlJhTsqy/MSGt9SRSOVEXtHaYjeldbOMoPDPJoeHRvbeC/Zivud2kctbc2G8lD7ciH+FZ2gvXVgjci/PhX/pnnYmyeqtiXeH5yuVm/rzUigPifNOV2vu8BvX0abNue8G232smxH2rwb/T9hHVvQsfSOJV8otR6iZj0rVCwz0+yDaD2ESgZVLw5x2XDSNhgv27i+DuE4zy33uiT5grcAUskhn4QWhN2iabsPhkPKWjanVeYM9AcHmfcn');
+
+
+INP = load '$input' using com.inadco.ecoadapters.pig.SequenceFileProtobufLoader('schema.emo.aglm.AGLM\\$Email');
+
+HBLEVAL = foreach INP generate (chararray)tenantId, (chararray)eventType, (chararray)domain, (chararray)timeStampYearMonth, (chararray)campaignId, (chararray)email, 1 AS icounter, (eventType == 'Send' ? 1 : 0) AS isend, (eventType == 'Click' ? 1 : 0) AS iclick, (eventType == 'Bounce' ? 1 : 0) AS ibounce, (eventType == 'Open' ? 1 : 0) AS iopen, (eventType == 'Subscribe' ? 1 : 0) AS isubscribe, (eventType == 'Unsubscribe' ? 1 : 0) AS iunsubscribe;
+
+
+--                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/eventType/domain/timeStampYearMonth', tenantId, eventType, domain, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC_10 = GROUP GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC by HKEY parallel 30;
+
+GR_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC = foreach GR_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC_10 = foreach GR_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC.isend) as isend, 
+  get_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC() as hbl_old;
+
+M_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC_20 = foreach M_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC = foreach M_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC_20 generate *;
+
+-- debug
+describe M_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC;
+
+store M_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC' using BinStorage();
+
+OUT_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC into 'AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC' using store_AGLM_tdeednth_F2BF7C978F439468EF5FB3E5FE5EDACC;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/timeStampYearMonth/email', tenantId, timeStampYearMonth, email)) as HKEY ;
+
+GR_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901_10 = GROUP GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 by HKEY parallel 30;
+
+GR_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 = foreach GR_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901_10 = foreach GR_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901.isend) as isend, 
+  get_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901() as hbl_old;
+
+M_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901_20 = foreach M_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 = foreach M_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901_20 generate *;
+
+-- debug
+describe M_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901;
+
+store M_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901' using BinStorage();
+
+OUT_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901 into 'AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901' using store_AGLM_tdthel_7AB4DFC8208655705E2E1866805FE901;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/timeStampYearMonth', tenantId, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F_10 = GROUP GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F by HKEY parallel 30;
+
+GR_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F = foreach GR_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F_10 = foreach GR_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F.isend) as isend, 
+  get_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F() as hbl_old;
+
+M_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F_20 = foreach M_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F = foreach M_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F_20 generate *;
+
+-- debug
+describe M_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F;
+
+store M_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdth_94A60662DFC27301144FEA5B0317D43F' using BinStorage();
+
+OUT_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdth_94A60662DFC27301144FEA5B0317D43F' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F into 'AGLM_tdth_94A60662DFC27301144FEA5B0317D43F' using store_AGLM_tdth_94A60662DFC27301144FEA5B0317D43F;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/eventType/campaignId/email/timeStampYearMonth', tenantId, eventType, campaignId, email, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41_10 = GROUP GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 by HKEY parallel 30;
+
+GR_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 = foreach GR_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41_10 = foreach GR_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41.isend) as isend, 
+  get_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41() as hbl_old;
+
+M_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41_20 = foreach M_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 = foreach M_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41_20 generate *;
+
+-- debug
+describe M_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41;
+
+store M_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41' using BinStorage();
+
+OUT_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41 into 'AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41' using store_AGLM_tdeecdelth_56ACDD189261F358C0FEA63710C0AE41;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/domain/timeStampYearMonth', tenantId, domain, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94_10 = GROUP GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 by HKEY parallel 30;
+
+GR_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 = foreach GR_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94_10 = foreach GR_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94.isend) as isend, 
+  get_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94() as hbl_old;
+
+M_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94_20 = foreach M_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 = foreach M_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94_20 generate *;
+
+-- debug
+describe M_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94;
+
+store M_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94' using BinStorage();
+
+OUT_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94 into 'AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94' using store_AGLM_tddnth_3281E9EB2BC0B1662ED5F729D3C55D94;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/eventType/timeStampYearMonth/email', tenantId, eventType, timeStampYearMonth, email)) as HKEY ;
+
+GR_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59_10 = GROUP GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 by HKEY parallel 30;
+
+GR_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 = foreach GR_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59_10 = foreach GR_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59.isend) as isend, 
+  get_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59() as hbl_old;
+
+M_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59_20 = foreach M_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 = foreach M_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59_20 generate *;
+
+-- debug
+describe M_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59;
+
+store M_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59' using BinStorage();
+
+OUT_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59 into 'AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59' using store_AGLM_tdeethel_09EC1B71CCD1D8B3E4ADB3C267E80B59;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/campaignId/email/timeStampYearMonth', tenantId, campaignId, email, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4_10 = GROUP GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 by HKEY parallel 30;
+
+GR_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 = foreach GR_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4_10 = foreach GR_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4.isend) as isend, 
+  get_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4() as hbl_old;
+
+M_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4_20 = foreach M_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 = foreach M_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4_20 generate *;
+
+-- debug
+describe M_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4;
+
+store M_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4' using BinStorage();
+
+OUT_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4 into 'AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4' using store_AGLM_tdcdelth_2F0C89BD1E102DFFE908A5B24BC9ECA4;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/eventType/timeStampYearMonth', tenantId, eventType, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51_10 = GROUP GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 by HKEY parallel 30;
+
+GR_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 = foreach GR_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51_10 = foreach GR_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51.isend) as isend, 
+  get_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51() as hbl_old;
+
+M_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51_20 = foreach M_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 = foreach M_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51_20 generate *;
+
+-- debug
+describe M_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51;
+
+store M_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51' using BinStorage();
+
+OUT_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51 into 'AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51' using store_AGLM_tdeeth_8E54C21183CED1C035031F9EAF979E51;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/eventType/campaignId/timeStampYearMonth', tenantId, eventType, campaignId, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9_10 = GROUP GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 by HKEY parallel 30;
+
+GR_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 = foreach GR_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9_10 = foreach GR_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9.isend) as isend, 
+  get_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9() as hbl_old;
+
+M_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9_20 = foreach M_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 = foreach M_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9_20 generate *;
+
+-- debug
+describe M_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9;
+
+store M_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9' using BinStorage();
+
+OUT_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9 into 'AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9' using store_AGLM_tdeecdth_ECCB36C22A423B43CBC01F4B3D1DCAA9;
+
+
+
+-- end of cuboid template.
+
+ --                                                                                       
+--  Copyright © 2010, 2011 Inadco, Inc. All rights reserved.                             
+--                                                                                       
+--     Licensed under the Apache License, Version 2.0 (the "License");                   
+--     you may not use this file except in compliance with the License.                  
+--     You may obtain a copy of the License at                                           
+--                                                                                       
+--         http://www.apache.org/licenses/LICENSE-2.0                                    
+--                                                                                       
+--     Unless required by applicable law or agreed to in writing, software               
+--     distributed under the License is distributed on an "AS IS" BASIS,                 
+--     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.          
+--     See the License for the specific language governing permissions and               
+--     limitations under the License.                                                    
+--                                                                                       
+                                                                                       
+
+-- template for cuboid computation. 
+-- there's a number of substitutes here, obviously.
+
+-- generate hbl_m2d("measure1",measure1),..,hbl_d2k(dim1,dim2,dim3) as HKEY
+-- cuboid key evaluation produces a bag of possible cuboid keys (all of the same length). 
+-- multiple keys are produced if there are hierarchies, to produce [ALL] keys.
+
+GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 = FOREACH HBLEVAL generate icounter, isubscribe, iopen, ibounce, iclick, iunsubscribe, isend,  FLATTEN(hbl_d2k('tenantId/campaignId/timeStampYearMonth', tenantId, campaignId, timeStampYearMonth)) as HKEY ;
+
+GR_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80_10 = GROUP GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 by HKEY parallel 30;
+
+GR_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 = foreach GR_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80_10 generate *;
+
+-- now we form tuples with results of aggregate functions inside 
+-- such as TO_TUPLE(SUM(GR_table.measure1),COUNT(GR_table.measure1)) as measure1:(sum:double,count:double)
+-- also hbase-get parts
+M_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80_10 = foreach GR_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 generate group as HKEY, 
+  hbl_aggr_icounter(GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80.icounter) as icounter,
+  hbl_aggr_isubscribe(GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80.isubscribe) as isubscribe,
+  hbl_aggr_iopen(GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80.iopen) as iopen,
+  hbl_aggr_ibounce(GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80.ibounce) as ibounce,
+  hbl_aggr_iclick(GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80.iclick) as iclick,
+  hbl_aggr_iunsubscribe(GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80.iunsubscribe) as iunsubscribe,
+  hbl_aggr_isend(GROUP_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80.isend) as isend, 
+  get_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80() as hbl_old;
+
+M_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80_20 = foreach M_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80_10 generate HKEY, 
+  (hbl_old.icounter is null?icounter:hbl_comb_icounter(TOBAG(hbl_old.icounter,icounter))) as icounter,
+  (hbl_old.isubscribe is null?isubscribe:hbl_comb_isubscribe(TOBAG(hbl_old.isubscribe,isubscribe))) as isubscribe,
+  (hbl_old.iopen is null?iopen:hbl_comb_iopen(TOBAG(hbl_old.iopen,iopen))) as iopen,
+  (hbl_old.ibounce is null?ibounce:hbl_comb_ibounce(TOBAG(hbl_old.ibounce,ibounce))) as ibounce,
+  (hbl_old.iclick is null?iclick:hbl_comb_iclick(TOBAG(hbl_old.iclick,iclick))) as iclick,
+  (hbl_old.iunsubscribe is null?iunsubscribe:hbl_comb_iunsubscribe(TOBAG(hbl_old.iunsubscribe,iunsubscribe))) as iunsubscribe,
+  (hbl_old.isend is null?isend:hbl_comb_isend(TOBAG(hbl_old.isend,isend))) as isend;
+
+M_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 = foreach M_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80_20 generate *;
+
+-- debug
+describe M_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80;
+
+store M_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 into '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80' using BinStorage();
+
+OUT_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 = load '/tmp/current_temp_path/hbltemp-csv-michael-1362632003787/AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80' using BinStorage() AS(
+HKEY:bytearray, 
+  icounter:bytearray,
+  isubscribe:bytearray,
+  iopen:bytearray,
+  ibounce:bytearray,
+  iclick:bytearray,
+  iunsubscribe:bytearray,
+  isend:bytearray );
+
+store OUT_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80 into 'AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80' using store_AGLM_tdcdth_0D8EA887263865A7C269915C75F41D80;
+
+
+
+-- end of cuboid template.
+
+ 
+
+
+
