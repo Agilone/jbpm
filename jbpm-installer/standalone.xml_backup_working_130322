@@ -100,64 +100,58 @@
         <subsystem xmlns="urn:jboss:domain:datasources:1.0">
             <datasources>
                 <datasource jta="true" jndi-name="java:jboss/datasources/jbpmDS" pool-name="jbpmDS" enabled="true" use-java-context="true" use-ccm="true">
-  <connection-url>jdbc:mysql://localhost:3306/njbpm?autoReconnect=true</connection-url>
-  <driver>mysql</driver>
-  <pool>
-    <min-pool-size>0</min-pool-size><!-- NEW -->
-    <max-pool-size>40</max-pool-size>
-    <prefill>false</prefill>
-    <use-strict-min>false</use-strict-min>
-    <flush-strategy>FailingConnectionOnly</flush-strategy>
-   
-    
-  </pool>
-  
-	<!-- START NEW -->
-  <statement>
-  <prepared-statement-cache-size>0</prepared-statement-cache-size>
-  <share-prepared-statements>false</share-prepared-statements>
-  </statement>
-  <timeout>
-  	<idle-timeout-minutes>2</idle-timeout-minutes><!-- NEW -->
-  	<allocation-retry>5</allocation-retry>
-  </timeout>
-	<!-- END NEW -->
-	
-  <security>
-    <user-name>njbpm</user-name>
-    <password>njbpm</password>
-  </security>
-  <validation>
-    <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
-    <validate-on-match>true</validate-on-match><!-- NEW -->
-    <background-validation>false</background-validation>
-  </validation>
-</datasource>
-<datasource jta="true" jndi-name="java:jboss/datasources/taskDS" pool-name="taskDS" enabled="true" use-java-context="true" use-ccm="true">
-  <connection-url>jdbc:mysql://localhost:3306/ntask?autoReconnect=true</connection-url>
-  <driver>mysql</driver>
-  <pool>
-    <min-pool-size>0</min-pool-size>
-    <max-pool-size>40</max-pool-size>
-    <prefill>false</prefill>
-    <use-strict-min>false</use-strict-min>
-    <flush-strategy>FailingConnectionOnly</flush-strategy>
-  </pool>
-  <security>
-    <user-name>njbpm</user-name>
-    <password>njbpm</password>
-  </security>
-  <validation>
-    <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
-    <validate-on-match>true</validate-on-match>
-    <background-validation>false</background-validation>
-  </validation>
-</datasource>
-<drivers>
-  <driver name="mysql" module="com.mysql">
-    <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
-  </driver>
-</drivers>            </datasources>
+                    <connection-url>jdbc:mysql://localhost:3306/njbpm</connection-url>
+                    <driver>mysql</driver>
+                    <pool>
+                        <min-pool-size>1</min-pool-size>
+                        <max-pool-size>40</max-pool-size>
+                        <prefill>false</prefill>
+                        <use-strict-min>false</use-strict-min>
+                        <flush-strategy>FailingConnectionOnly</flush-strategy>
+                    </pool>
+                    <security>
+                        <user-name>njbpm</user-name>
+                        <password>njbpm</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+                        <validate-on-match>false</validate-on-match>
+                        <background-validation>false</background-validation>
+                    </validation>
+                    <timeout>
+                        <allocation-retry>5</allocation-retry>
+                    </timeout>
+                    <statement>
+                        <prepared-statement-cache-size>0</prepared-statement-cache-size>
+                        <share-prepared-statements>false</share-prepared-statements>
+                    </statement>
+                </datasource>
+                <datasource jta="true" jndi-name="java:jboss/datasources/taskDS" pool-name="taskDS" enabled="true" use-java-context="true" use-ccm="true">
+                    <connection-url>jdbc:mysql://192.168.1.164:3306/ntask</connection-url>
+                    <driver>mysql</driver>
+                    <pool>
+                        <min-pool-size>1</min-pool-size>
+                        <max-pool-size>40</max-pool-size>
+                        <prefill>false</prefill>
+                        <use-strict-min>false</use-strict-min>
+                        <flush-strategy>FailingConnectionOnly</flush-strategy>
+                    </pool>
+                    <security>
+                        <user-name>njbpm</user-name>
+                        <password>njbpm</password>
+                    </security>
+                    <validation>
+                        <check-valid-connection-sql>SELECT 1</check-valid-connection-sql>
+                        <validate-on-match>false</validate-on-match>
+                        <background-validation>false</background-validation>
+                    </validation>
+                </datasource>
+                <drivers>
+                    <driver name="mysql" module="com.mysql">
+                        <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+                    </driver>
+                </drivers>
+            </datasources>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="300"/>

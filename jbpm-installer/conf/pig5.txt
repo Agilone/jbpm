@@ -1,18 +1,12 @@
-register /usr/lib/hadoop/lib/a1schema_2.9.1-1.1307-SNAPSHOT.jar;
-register /home/ubuntu/ecoadapters-0.5.0-SNAPSHOT.jar;
-register /usr/lib/hadoop/lib/protobuf-java-2.4.0a.jar;
-register /home/ubuntu/sridhar/Elastic-Data-Grid_old/cube-builder.jar;
-register /home/ubuntu/sridhar/Elastic-Data-Grid_old/hbl-0.2.11-SNAPSHOT.jar;    
+register /usr/lib/pig/lib/a1schema_2.9.1-1.1307-SNAPSHOT.jar;
+register /usr/lib/pig/lib/ecoadapters-0.5.0-SNAPSHOT.jar;
+register /usr/lib/pig/lib/protobuf-java-2.4.0a.jar;
+register /usr/lib/pig/lib/cube-builder.jar;
+register /usr/lib/pig/lib/hbl-0.2.11-SNAPSHOT.jar;    
+register /usr/lib/pig/lib/jruby-complete-1.6.5.jar;
+register /usr/lib/pig/lib/hbase-0.94.2-cdh4.2.0-security.jar;
 
--- register /usr/lib/pig/lib/a1schema_2.9.1-1.1307-SNAPSHOT.jar;
--- register /usr/lib/pig/lib/ecoadapters-0.5.0-SNAPSHOT.jar;
--- register /usr/lib/pig/lib/protobuf-java-2.4.0a.jar;
--- register /usr/lib/pig/lib/cube-builder.jar;
--- register /usr/lib/pig/lib/hbl-0.2.11-SNAPSHOT.jar;    
--- register /usr/lib/pig/lib/jruby-complete-1.6.5.jar;
--- register /usr/lib/pig/lib/hbase-0.94.2-cdh4.2.0-security.jar;
-
--- set hbase.zookeeper.quorum 'CASCHDP9.agilone.com,CASCHDP8.agilone.com,CASCHDP7.agilone.com';
+set hbase.zookeeper.quorum 'CASCHDP9.agilone.com,CASCHDP8.agilone.com,CASCHDP7.agilone.com';
 
 set pig.noSplitCombination true; -- don't combine small files in one split  
 
